@@ -14,14 +14,14 @@ Es **importante**❗tener instalado:
 # Instalación ⬇️
 Los siguiente comando le permitira clonar el repositorio de manera local:
 ~~~
-git clone 
+git clone https://github.com/SantiagoMelo0104/AREP-LAB3.git
 ~~~
 
 # Ejecución🪄 
 Para este ejemplo usaremos el IDE de Intelij:
 
-+ Una vez clonado, abrimos el proyecto en en IDE y ubicamos la siguiente clase **HttpServer**.
-![image](https://github.com/SantiagoMelo0104/AREP-LAB2/assets/123812833/3e632801-e63c-4ee0-ba36-03b62878b806)
++ Una vez clonado, abrimos el proyecto en en IDE y ubicamos la siguiente clase **APP**.
+
 
 + Para ejecutar el proyecto podemos hacerlo presionando cualquiera de los recuadros a continuación
 ![image](https://github.com/SantiagoMelo0104/AREP-LAB2/assets/123812833/8d452fb3-2d44-421b-b552-44a2479ce4b2)
