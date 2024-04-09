@@ -18,7 +18,7 @@ public class App {
         });
 
         // start the server
-        if (!SNSpark.running) SNSpark.getInstance().start(args);
+        if (!SNSpark.isRunning()) SNSpark.getInstance().start(args);
 
 
     }

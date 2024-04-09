@@ -22,9 +22,12 @@ import java.util.HashMap;
 public class SNSpark {
 
     private static HashMap<String, Function> service = new HashMap<>();
-    public static boolean running = false;
+    private static boolean running = false;
     private static SNSpark instance = null;
 
+    public static boolean isRunning() {
+        return running;
+    }
 
     /**
      * Returns the singleton instance of the SNSpark class.
@@ -85,7 +88,6 @@ public class SNSpark {
 
             URI requestUri = new URI(uriStr);
             try {
-                System.out.println("----------------"+ requestUri.getPath());
                 if (requestUri.getPath().startsWith("/action")) {
                     if(service.containsKey(requestUri.getPath().replace("/action",""))){
                         outputLine = callService(requestUri);
