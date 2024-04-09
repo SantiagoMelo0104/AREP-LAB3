@@ -16,6 +16,7 @@ import java.util.HashMap;
 
 /**
  * Class to start the server
+ *
  * @author Santiago Naranjo
  * @author Daniel Benavides
  */
@@ -42,7 +43,7 @@ public class SNSpark {
      * Starts the SNSpark server and listens for incoming connections on port 35000.
      *
      * @param args command-line arguments (ignored)
-     * @throws IOException if there is an error starting the server
+     * @throws IOException        if there is an error starting the server
      * @throws URISyntaxException if there is an error parsing a URI
      */
     public void start(String[] args) throws IOException, URISyntaxException {
@@ -85,14 +86,14 @@ public class SNSpark {
 
             URI requestUri = new URI(uriStr);
             try {
-                System.out.println("----------------"+ requestUri.getPath());
+                System.out.println("----------------" + requestUri.getPath());
                 if (requestUri.getPath().startsWith("/action")) {
-                    if(service.containsKey(requestUri.getPath().replace("/action",""))){
+                    if (service.containsKey(requestUri.getPath().replace("/action", ""))) {
                         outputLine = callService(requestUri);
                         out.println(outputLine);
-                    } else if(requestUri.getPath().contains(".")){
+                    } else if (requestUri.getPath().contains(".")) {
                         httpResponse(requestUri.getPath().replace("/action", ""), clientSocket.getOutputStream());
-                    }else{
+                    } else {
                         httpError();
                     }
                 } else {
@@ -123,10 +124,9 @@ public class SNSpark {
                 + "\r\n";
 
         if (service.containsKey(calledServiceUri)) {
-            if(requestUri.getQuery() != null){
+            if (requestUri.getQuery() != null) {
                 output += service.get(calledServiceUri).handle(requestUri.getQuery().split("=")[1]);
-            }
-            else{
+            } else {
                 output += service.get(calledServiceUri).handle("");
             }
         }
@@ -137,8 +137,8 @@ public class SNSpark {
      * Registers a GET request handler for the given path.
      *
      * @param path the path for which to register the handler
-     * @param s the handler function to execute when the path is requested via a GET request
-     * @throws IOException if there is an error registering the handler
+     * @param s    the handler function to execute when the path is requested via a GET request
+     * @throws IOException        if there is an error registering the handler
      * @throws URISyntaxException if the path is not a valid URI
      */
     public static void get(String path, Function s) throws IOException, URISyntaxException {
@@ -149,8 +149,8 @@ public class SNSpark {
      * Registers a POST request handler for the given path.
      *
      * @param path the path for which to register the handler
-     * @param s the handler function to execute when the path is requested via a POST request
-     * @throws IOException if there is an error registering the handler
+     * @param s    the handler function to execute when the path is requested via a POST request
+     * @throws IOException        if there is an error registering the handler
      * @throws URISyntaxException if the path is not a valid URI
      */
     public static void post(String path, Function s) throws IOException, URISyntaxException {
@@ -162,8 +162,8 @@ public class SNSpark {
      *
      * @return the HTTP error response as a string
      */
-    public static String httpError(){
-        String outputLine ="HTTP/1.1 404 Not Found \r\n"
+    public static String httpError() {
+        String outputLine = "HTTP/1.1 404 Not Found \r\n"
                 + "Content-Type:text/html\r\n"
                 + "\r\n"
                 + "<!DOCTYPE html>\n"
@@ -200,11 +200,21 @@ public class SNSpark {
                 outputStream.write(("Content-Type: " + contentType + "\r\n").getBytes());
                 outputStream.write("\r\n".getBytes());
                 if (Files.isRegularFile(file) && contentType.startsWith("image/")) {
-                    byte[] bytes = Files.readAllBytes(file);
-                    outputStream.write(bytes);
+                    try (InputStream inputStream = Files.newInputStream(file)) {
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+                    }
                 } else {
-                    String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
-                    outputStream.write(content.getBytes());
+                    try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            outputStream.write(line.getBytes());
+                            outputStream.write("\r\n".getBytes());
+                        }
+                    }
                 }
             } else {
                 String outputLine = httpError();
