@@ -1,9 +1,7 @@
 name: SynkSecurity
 on:
   push:
-    branches: ["master", "Develop", "snyk1"]
-  pull_request:
-    branches: ["master"]
+    branches: ["snyk1"]
 jobs:
   security:
     runs-on: ubuntu-latest
