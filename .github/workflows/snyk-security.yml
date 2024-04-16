@@ -1,5 +1,7 @@
 name: Snyk-Secure
-on: push
+on:
+  push:
+    branches: ["snyk1"]
 jobs:
   security:
     runs-on: ubuntu-latest
