@@ -1,14 +1,15 @@
-name: SynkSecurity
+name: Snyk Security
 on:
   push:
-    branches: ["snyk1"]
+    branches:
+      - snyk1
 jobs:
   security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@snyk1
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven-3-jdk-17@snyk1
+        uses: snyk/actions/maven@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
